@@ -206,6 +206,35 @@
                     app:layout_constraintStart_toEndOf="@id/tv_mtu_label"
                     app:layout_constraintTop_toTopOf="@id/tv_mtu_label"
                     tools:text="0 bytes" />
+
+                <TextView
+                    android:id="@+id/tv_received_packet_label"
+                    style="@style/TextBig"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Received Packet Data:"
+                    android:textColor="@color/silabs_subtle_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_connection_parameters"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mtu_label" />
+
+                <TextView
+                    android:id="@+id/tv_received_packet_data"
+                    style="@style/TextMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/et_background"
+                    android:fontFamily="monospace"
+                    android:padding="8dp"
+                    android:textColor="@color/silabs_green"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_connection_parameters"
+                    app:layout_constraintTop_toBottomOf="@id/tv_received_packet_label"
+                    tools:text="Hex: CD CC 8C 3F CD CC 0C 40 CD CC 54 40 CD CC 8C 40 CD CC C0 40 CD CC E8 40 CD CC F6 40\nFloats: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </RelativeLayout>

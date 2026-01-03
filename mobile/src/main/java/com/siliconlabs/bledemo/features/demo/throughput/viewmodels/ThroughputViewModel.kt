@@ -25,6 +25,8 @@ class ThroughputViewModel : ViewModel() {
     val supervisionTimeout: LiveData<Int> = _supervisionTimeout
     private val _throughputSpeed: MutableLiveData<Int> = MutableLiveData()
     val throughputSpeed: LiveData<Int> = _throughputSpeed
+    private val _receivedPacketData: MutableLiveData<String> = MutableLiveData()
+    val receivedPacketData: LiveData<String> = _receivedPacketData
 
     private var bitsCounted: Int = 0
     private var timerTask: TimerTask? = null
@@ -50,10 +52,12 @@ class ThroughputViewModel : ViewModel() {
             GattCharacteristic.ThroughputIndications -> {
                 isDownloadingNotifications = false
                 addBitsToCount(characteristic.value.size)
+                updateReceivedPacketData(characteristic.value)
             }
             GattCharacteristic.ThroughputNotifications -> {
                 isDownloadingNotifications = true
                 addBitsToCount(characteristic.value.size)
+                updateReceivedPacketData(characteristic.value)
             }
             else -> { }
         }
@@ -61,6 +65,25 @@ class ThroughputViewModel : ViewModel() {
 
     fun addBitsToCount(packetSize: Int) {
         bitsCounted += packetSize*8
+    }
+
+    private fun updateReceivedPacketData(data: ByteArray) {
+        // Convert byte array to hex string for display
+        val hexString = data.joinToString(" ") { String.format("%02X", it) }
+
+        // If data is 28 bytes, try to parse as 7 float values
+        if (data.size == 28) {
+            val floatValues = mutableListOf<Float>()
+            for (i in 0 until 7) {
+                val floatBytes = data.copyOfRange(i * 4, (i + 1) * 4)
+                val floatValue = java.nio.ByteBuffer.wrap(floatBytes).order(java.nio.ByteOrder.LITTLE_ENDIAN).float
+                floatValues.add(floatValue)
+            }
+            val floatString = floatValues.joinToString(", ") { String.format("%.1f", it) }
+            _receivedPacketData.postValue("Hex: $hexString\nFloats: $floatString")
+        } else {
+            _receivedPacketData.postValue("Hex: $hexString")
+        }
     }
 
     fun toggleTestState(toggleOn: Boolean, isUpload: Boolean) {

@@ -82,6 +82,9 @@ class ThroughputFragment : Fragment(R.layout.fragment_throughput) {
             binding.viewConnectionParameters.tvPduValue.text =
                 getString(R.string.throughput_n_bytes, it)
         })
+        viewModel.receivedPacketData.observe(viewLifecycleOwner, Observer { packetData ->
+            binding.viewConnectionParameters.tvReceivedPacketData.text = packetData ?: "No data received"
+        })
         viewModel.throughputSpeed.observe(viewLifecycleOwner, Observer {
             updateSpeed(it)
         })
